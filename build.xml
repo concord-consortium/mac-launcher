@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CCLauncher" default="package" basedir=".">
+
+  <property environment="env" />
+
+  <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0.jar" />
+
+  <target name="clean">
+    <delete dir="dist" removeNotFollowedSymlinks="true" followSymlinks="false" />
+  </target>
+
+  <target name="dist-clean" depends="clean">
+    <delete dir="tmp" removeNotFollowedSymlinks="true" followSymlinks="false" />
+  </target>
+
+  <target name="prep" depends="clean">
+    <mkdir dir="dist" />
+    <mkdir dir="dist/app" />
+    <mkdir dir="dist/.background" />
+    <mkdir dir="tmp" />
+  </target>
+
+  <target name="build" depends="prep">
+    <fail unless="env.JAVA_HOME" message="You must set JAVA_HOME (eg: 'export JAVA_HOME=`/usr/libexec/java_home`')" />
+    <get src="http://jars.dev.concord.org/dev3/org/concord/utilities/response-cache/response-cache-0.1.0-20140107.154611-222.jar" dest="tmp/" skipexisting="true" />
+    <get src="http://jars.dev.concord.org/dev3/org/concord/jnlp2shell/jnlp2shell-1.0-20140107.154449-466.jar" dest="tmp/" skipexisting="true" />
+    <copy file="resources/bg.png" todir="dist/app/.background" />
+    <symlink link="dist/app/Applications" resource="/Applications" overwrite="true" />
+    <bundleapp outputdirectory="dist/app"
+               name="CCLauncher" displayname="CC Launcher"
+               icon="resources/cc-lightbulb.icns"
+               identifier="org.concord.CCLauncher"
+               mainclassname="org.concord.LaunchFromArgs">
+      <runtime dir="${env.JAVA_HOME}" />
+      <classpath dir="tmp/">
+        <include name="**/*.jar" />
+       <!--  <exclude name="**/*466.jar" /> -->
+      </classpath>
+    </bundleapp>
+    <exec executable="./bin/mime-modify.sh" />
+  </target>
+
+  <target name="package" depends="prep,build">
+    <exec executable="./bin/create_dmg.sh" />
+  </target>
+
+</project>
