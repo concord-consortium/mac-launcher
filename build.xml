@@ -2,6 +2,9 @@
 <project name="CCLauncher" default="package" basedir=".">
 
   <property environment="env" />
+  <condition property="certname" value="${env.CERT_NAME}" else="Concord Consortium">
+    <isset property="env.CERT_NAME" />
+  </condition>
 
   <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0ea.jar" />
 
@@ -54,7 +57,16 @@
     </bundleapp>
   </target>
 
-  <target name="package" depends="prep,build">
+  <target name="sign">
+    <exec executable="codesign" failonerror="false">
+      <arg value="--deep" />
+      <arg value="-s" />
+      <arg value="${certname}" />
+      <arg value="dist/app/CCLauncher.app" />
+    </exec>
+  </target>
+
+  <target name="package" depends="prep,build,sign">
     <exec executable="./bin/create_dmg.sh" />
   </target>
 
