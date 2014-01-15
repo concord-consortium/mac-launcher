@@ -3,7 +3,7 @@
 
   <property environment="env" />
 
-  <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0.jar" />
+  <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0ea.jar" />
 
   <target name="clean">
     <delete dir="dist" removeNotFollowedSymlinks="true" followSymlinks="false" />
@@ -28,16 +28,30 @@
     <symlink link="dist/app/Applications" resource="/Applications" overwrite="true" />
     <bundleapp outputdirectory="dist/app"
                name="CCLauncher" displayname="CC Launcher"
+               executableName="CCLauncher"
+               shortversion="1.0" version="1.0.0"
                icon="resources/cc-lightbulb.icns"
                identifier="org.concord.CCLauncher"
                mainclassname="org.concord.LaunchFromArgs">
+      
+      <arch name="x86_64" />
+      <arch name="i386" />
+
       <runtime dir="${env.JAVA_HOME}" />
       <classpath dir="tmp/">
         <include name="**/*.jar" />
        <!--  <exclude name="**/*466.jar" /> -->
       </classpath>
+
+      <option value="-Xmx512M" name="Xmx" />
+      <option value="-Xms32M" name="Xms" />
+
+      <bundledocument extensions="ccla"
+        icon="resources/cc-lightbulb.icns"
+        name="CC Launcher Doc"
+        role="viewer">
+      </bundledocument>
     </bundleapp>
-    <exec executable="./bin/mime-modify.sh" />
   </target>
 
   <target name="package" depends="prep,build">
