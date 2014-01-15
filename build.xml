@@ -26,7 +26,7 @@
   <target name="build" depends="prep">
     <fail unless="env.JAVA_HOME" message="You must set JAVA_HOME (eg: 'export JAVA_HOME=`/usr/libexec/java_home`')" />
     <get src="http://jars.dev.concord.org/dev3/org/concord/utilities/response-cache/response-cache-0.1.0-20140107.154611-222.jar" dest="tmp/" skipexisting="true" />
-    <get src="http://jars.dev.concord.org/dev3/org/concord/jnlp2shell/jnlp2shell-1.0-20140107.154449-466.jar" dest="tmp/" skipexisting="true" />
+    <get src="http://jars.dev.concord.org/dev3/org/concord/jnlp2shell/jnlp2shell-1.0-20140114.164730-467.jar" dest="tmp/" skipexisting="true" />
     <copy file="resources/bg.png" todir="dist/app/.background" />
     <symlink link="dist/app/Applications" resource="/Applications" overwrite="true" />
     <bundleapp outputdirectory="dist/app"
@@ -35,7 +35,7 @@
                shortversion="1.0" version="1.0.0"
                icon="resources/cc-lightbulb.icns"
                identifier="org.concord.CCLauncher"
-               mainclassname="org.concord.LaunchFromArgs">
+               mainclassname="org.concord.CCLauncher">
       
       <arch name="x86_64" />
       <arch name="i386" />
