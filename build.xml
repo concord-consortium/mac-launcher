@@ -10,9 +10,6 @@
 
   <target name="clean">
     <delete dir="dist" removeNotFollowedSymlinks="true" followSymlinks="false" />
-  </target>
-
-  <target name="dist-clean" depends="clean">
     <delete dir="tmp" removeNotFollowedSymlinks="true" followSymlinks="false" />
   </target>
 
