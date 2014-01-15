@@ -40,7 +40,6 @@
       <runtime dir="${env.JAVA_HOME}" />
       <classpath dir="tmp/">
         <include name="**/*.jar" />
-       <!--  <exclude name="**/*466.jar" /> -->
       </classpath>
 
       <option value="-Xmx512M" name="Xmx" />
@@ -66,5 +65,6 @@
   <target name="package" depends="prep,build,sign">
     <exec executable="./bin/create_dmg.sh" />
   </target>
+
 
 </project>
