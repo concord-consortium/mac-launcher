@@ -2,15 +2,22 @@
 <project name="CCLauncher" default="package" basedir=".">
 
   <property environment="env" />
-  <condition property="certname" value="${env.CERT_NAME}" else="Concord Consortium">
+  <condition property="certname" value="${env.CERT_NAME}" else="Developer ID Application: Concord Consortium Inc (T8HS8WBPPQ)">
     <isset property="env.CERT_NAME" />
   </condition>
 
   <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="lib/appbundler-1.0ea.jar" />
 
   <target name="clean">
-    <delete dir="dist" removeNotFollowedSymlinks="true" followSymlinks="false" />
-    <delete dir="tmp" removeNotFollowedSymlinks="true" followSymlinks="false" />
+    <exec executable="rm" failonerror="false">
+      <arg value="dist/app/Applications" />
+    </exec>
+    <delete removeNotFollowedSymlinks="true" followSymlinks="false" includeEmptyDirs="true">
+      <fileset dir="dist" />
+    </delete>
+    <delete removeNotFollowedSymlinks="true" followSymlinks="false" includeEmptyDirs="true">
+      <fileset dir="tmp" />
+    </delete>
   </target>
 
   <target name="prep" depends="clean">
@@ -64,6 +71,11 @@
 
   <target name="package" depends="prep,build,sign">
     <exec executable="./bin/create_dmg.sh" />
+    <exec executable="codesign" failonerror="false">
+      <arg value="-s" />
+      <arg value="${certname}" />
+      <arg value="dist/cc_launcher_installer.dmg" />
+    </exec>
   </target>
 
 
